@@ -8,6 +8,12 @@ namespace TerapicFisicHelper.Entities
 {
     public class Session
     {
+<<<<<<< Updated upstream
+=======
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Debe asignar un especialista a la sesion")]
+>>>>>>> Stashed changes
         public int SpecialistId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
