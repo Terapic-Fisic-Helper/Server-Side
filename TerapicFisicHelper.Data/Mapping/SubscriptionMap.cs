@@ -14,26 +14,17 @@ namespace TerapicFisicHelper.Data.Mapping
         public void Configure(EntityTypeBuilder<Subscription> builder)
         {
             builder.ToTable("subscriptions");
-            builder.HasKey(h => h.StartDate);
-            builder.HasKey(h => h.CustomerId);
-            builder.HasKey(h => h.SubscriptionPlanId);
-            builder.Property(c => c.CustomerId).HasColumnName("customer_id");
-            builder.Property(s => s.SubscriptionPlanId).HasColumnName("subscriptionplan_id");
-
-            builder.Property(s => s.StartDate).IsRequired();
-            builder.Property(s => s.ExpiryDate).IsRequired();
+            builder.HasKey(s => new { s.CustomerId, s.SubscriptionPlanId });
+            builder.Property(s => s.StartDate);
+            builder.Property(s => s.ExpiryDate);
 
             builder.HasOne(s => s.Customer)
                 .WithMany(c => c.Subscriptions)
-                .HasForeignKey(s => s.CustomerId)
-                .HasConstraintName("fk_suscription_customer")
-                .IsRequired(true);
-
+                .HasForeignKey(s => s.CustomerId);
+            
             builder.HasOne(s => s.SubscriptionPlan)
                 .WithMany(sp => sp.Subscriptions)
-                .HasForeignKey(s => s.SubscriptionPlanId)
-                .HasConstraintName("fk_suscription_plan")
-                .IsRequired(true);
+                .HasForeignKey(s => s.SubscriptionPlanId);
         }
     }
 }

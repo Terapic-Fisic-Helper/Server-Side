@@ -15,10 +15,10 @@ namespace TerapicFisicHelper.Data.Mapping
         {
             builder.ToTable("subscription_plans");
             builder.HasKey(sp => sp.Id);
-            builder.Property(sp => sp.Id).IsRequired().ValueGeneratedOnAdd();
-            builder.Property(sp => sp.Name).IsRequired().HasMaxLength(50);
-            builder.Property(sp => sp.Description).IsRequired().HasMaxLength(255);
-            builder.Property(sp => sp.Cost).IsRequired();
+            builder.Property(sp => sp.Id).HasColumnName("subscriptionplans_id");
+            builder.Property(sp => sp.Name).HasColumnName("name").HasMaxLength(50);
+            builder.Property(sp => sp.Description).HasColumnName("description").HasMaxLength(255);
+            builder.Property(sp => sp.Cost);
         }
     }
 }

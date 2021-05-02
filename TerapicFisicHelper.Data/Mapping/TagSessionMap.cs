@@ -14,22 +14,15 @@ namespace TerapicFisicHelper.Data.Mapping
         public void Configure(EntityTypeBuilder<TagSession> builder)
         {
             builder.ToTable("tag_sessions");
-            builder.HasKey(h => h.TagId);
-            builder.HasKey(h => h.SessionId);
-            builder.Property(r => r.TagId).HasColumnName("tag_id");
-            builder.Property(r => r.SessionId).HasColumnName("session_id");
+            builder.HasKey(ts => new { ts.TagId, ts.SessionId });
 
-            builder.HasOne(ts => ts.Tag)
-                .WithMany(ts => ts.TagSessions)
-                .HasForeignKey(ts => ts.TagId)
-                .HasConstraintName("fk_TagSession_tag")
-                .IsRequired(true);
+            builder.HasOne(ts => ts.Tag).
+                WithMany(ts => ts.TagSessions).
+                HasForeignKey(ts => ts.TagId);
             
             builder.HasOne(ts => ts.Session)
                 .WithMany(s => s.TagSessions)
-                .HasForeignKey(ts => ts.SessionId)
-                .HasConstraintName("fk_TagSession_session")
-                .IsRequired(true);
+                .HasForeignKey(ts => ts.SessionId);
         }
     }
 }

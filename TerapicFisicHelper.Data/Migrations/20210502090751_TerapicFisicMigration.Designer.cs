@@ -10,7 +10,7 @@ using TerapicFisicHelper.Data;
 namespace TerapicFisicHelper.Data.Migrations
 {
     [DbContext(typeof(DbContextTerapicFisicHelperApp))]
-    [Migration("20210502081246_TerapicFisicMigration")]
+    [Migration("20210502090751_TerapicFisicMigration")]
     partial class TerapicFisicMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,12 +26,14 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("customers_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("description");
 
                     b.Property<int>("UserId")
                         .HasMaxLength(5)
@@ -42,7 +44,7 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("customer");
+                    b.ToTable("customers");
                 });
 
             modelBuilder.Entity("TerapicFisicHelper.Entities.Equipament", b =>
@@ -50,17 +52,20 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("equipaments_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
@@ -69,37 +74,33 @@ namespace TerapicFisicHelper.Data.Migrations
 
             modelBuilder.Entity("TerapicFisicHelper.Entities.EquipamentSession", b =>
                 {
-                    b.Property<int>("SessionId")
-                        .HasColumnType("int")
-                        .HasColumnName("session_id");
-
                     b.Property<int>("EquipamentId")
-                        .HasColumnType("int")
-                        .HasColumnName("equipament_id");
+                        .HasColumnType("int");
 
-                    b.HasKey("SessionId");
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("EquipamentId");
+                    b.HasKey("EquipamentId", "SessionId");
+
+                    b.HasIndex("SessionId");
 
                     b.ToTable("equipament_sessions");
                 });
 
             modelBuilder.Entity("TerapicFisicHelper.Entities.History", b =>
                 {
-                    b.Property<int>("SessionId")
-                        .HasColumnType("int")
-                        .HasColumnName("session_id");
-
                     b.Property<int>("CustomerId")
-                        .HasColumnType("int")
-                        .HasColumnName("customer_id");
+                        .HasColumnType("int");
+
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Watched")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("SessionId");
+                    b.HasKey("CustomerId", "SessionId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("SessionId");
 
                     b.ToTable("histories");
                 });
@@ -114,8 +115,9 @@ namespace TerapicFisicHelper.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("description");
 
                     b.Property<int>("Rank")
                         .HasColumnType("int");
@@ -132,12 +134,14 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("sessions_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("description");
 
                     b.Property<string>("EndHour")
                         .IsRequired()
@@ -158,7 +162,8 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("title");
 
                     b.HasKey("Id");
 
@@ -172,12 +177,14 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("specialist_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Specialty")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("specialty");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -192,13 +199,11 @@ namespace TerapicFisicHelper.Data.Migrations
 
             modelBuilder.Entity("TerapicFisicHelper.Entities.Subscription", b =>
                 {
-                    b.Property<int>("SubscriptionPlanId")
-                        .HasColumnType("int")
-                        .HasColumnName("subscriptionplan_id");
-
                     b.Property<int>("CustomerId")
-                        .HasColumnType("int")
-                        .HasColumnName("customer_id");
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubscriptionPlanId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
@@ -206,9 +211,9 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("SubscriptionPlanId");
+                    b.HasKey("CustomerId", "SubscriptionPlanId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("SubscriptionPlanId");
 
                     b.ToTable("subscriptions");
                 });
@@ -218,6 +223,7 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("subscriptionplans_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Cost")
@@ -226,12 +232,14 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
@@ -243,17 +251,20 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("tag_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
@@ -262,17 +273,15 @@ namespace TerapicFisicHelper.Data.Migrations
 
             modelBuilder.Entity("TerapicFisicHelper.Entities.TagSession", b =>
                 {
-                    b.Property<int>("SessionId")
-                        .HasColumnType("int")
-                        .HasColumnName("session_id");
-
                     b.Property<int>("TagId")
-                        .HasColumnType("int")
-                        .HasColumnName("tag_id");
+                        .HasColumnType("int");
 
-                    b.HasKey("SessionId");
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("TagId");
+                    b.HasKey("TagId", "SessionId");
+
+                    b.HasIndex("SessionId");
 
                     b.ToTable("tag_sessions");
                 });
@@ -287,7 +296,8 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("address");
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -298,32 +308,38 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                        .HasColumnType("nvarchar(80)")
+                        .HasColumnName("country");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("email");
 
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("gender");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("lastname");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("name");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -355,14 +371,12 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.HasOne("TerapicFisicHelper.Entities.Equipament", "Equipament")
                         .WithMany("EquipamentSessions")
                         .HasForeignKey("EquipamentId")
-                        .HasConstraintName("fk_Equipament_Equipamentsession")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TerapicFisicHelper.Entities.Session", "Session")
                         .WithMany("EquipamentSessions")
                         .HasForeignKey("SessionId")
-                        .HasConstraintName("fk_Ession_Equipamentsession")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -376,14 +390,12 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.HasOne("TerapicFisicHelper.Entities.Customer", "Customer")
                         .WithMany("Histories")
                         .HasForeignKey("CustomerId")
-                        .HasConstraintName("fk_history_customer")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TerapicFisicHelper.Entities.Session", "Session")
                         .WithMany("Histories")
                         .HasForeignKey("SessionId")
-                        .HasConstraintName("fk_history_session")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -439,14 +451,12 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.HasOne("TerapicFisicHelper.Entities.Customer", "Customer")
                         .WithMany("Subscriptions")
                         .HasForeignKey("CustomerId")
-                        .HasConstraintName("fk_suscription_customer")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TerapicFisicHelper.Entities.SubscriptionPlan", "SubscriptionPlan")
                         .WithMany("Subscriptions")
                         .HasForeignKey("SubscriptionPlanId")
-                        .HasConstraintName("fk_suscription_plan")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -460,14 +470,12 @@ namespace TerapicFisicHelper.Data.Migrations
                     b.HasOne("TerapicFisicHelper.Entities.Session", "Session")
                         .WithMany("TagSessions")
                         .HasForeignKey("SessionId")
-                        .HasConstraintName("fk_TagSession_session")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TerapicFisicHelper.Entities.Tag", "Tag")
                         .WithMany("TagSessions")
                         .HasForeignKey("TagId")
-                        .HasConstraintName("fk_TagSession_tag")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

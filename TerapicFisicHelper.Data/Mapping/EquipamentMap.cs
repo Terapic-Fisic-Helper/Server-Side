@@ -15,9 +15,9 @@ namespace TerapicFisicHelper.Data.Mapping
         {
             builder.ToTable("equipaments");
             builder.HasKey(e => e.Id);
-            builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
-            builder.Property(e => e.Name).IsRequired().HasMaxLength(50);
-            builder.Property(e => e.Description).IsRequired().HasMaxLength(255);
+            builder.Property(e => e.Id).HasColumnName("equipaments_id");
+            builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(50);
+            builder.Property(e => e.Description).HasColumnName("description").HasMaxLength(255);
         }
     }
 }
