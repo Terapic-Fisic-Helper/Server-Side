@@ -23,7 +23,7 @@ namespace TerapicFisicHelper.Entities
         [Required]
         public DateTime Birth { get; set; }
         [Required(ErrorMessage = "Debe incluir la direccion del usuario")]
-        [StringLength(250, MinimumLength = 3, ErrorMessage = "Direccion del usuario debe tener entre 3 a 255 caracteres")]
+        [StringLength(255, MinimumLength = 3, ErrorMessage = "Direccion del usuario debe tener entre 3 a 255 caracteres")]
         public string Address { get; set; }
         [Required]
         public long Phone { get; set; }
@@ -42,8 +42,6 @@ namespace TerapicFisicHelper.Entities
         [Required(ErrorMessage = "Debe incluir el password del usuario")]
         [StringLength(8, ErrorMessage = "Password del usuario debe tener al menos 8 caracteres")]
         public string Password { get; set; }
-        [JsonIgnore]
-        public string Token { get; set; }
 
         public Customer Customer { get; set; }
         public Specialist Specialist { get; set; }
