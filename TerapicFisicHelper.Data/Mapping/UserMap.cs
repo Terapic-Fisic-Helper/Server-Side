@@ -26,8 +26,17 @@ namespace TerapicFisicHelper.Data.Mapping
             builder.Property(u => u.Country).IsRequired().HasMaxLength(80);
             builder.Property(u => u.Gender).IsRequired().HasMaxLength(20);
             builder.Property(u => u.Password).IsRequired().HasMaxLength(8);
+
+            builder.HasOne(u => u.Customer)
+                .WithOne(c => c.User)
+                .HasForeignKey<Customer>(u => u.UserId)
+                .HasConstraintName("fk_user_customer");
             
-            
+            builder.HasOne(u => u.Specialist)
+                .WithOne(s => s.User)
+                .HasForeignKey<Specialist>(u => u.UserId)
+                .HasConstraintName("fk_user_specialist");
+
         }
     }
 }
