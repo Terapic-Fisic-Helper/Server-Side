@@ -42,8 +42,6 @@ namespace TerapicFisicHelper.Entities
         [Required(ErrorMessage = "Debe incluir el password del usuario")]
         [StringLength(8, ErrorMessage = "Password del usuario debe tener al menos 8 caracteres")]
         public string Password { get; set; }
-        [JsonIgnore]
-        public string Token { get; set; }
 
         public Customer Customer { get; set; }
         public Specialist Specialist { get; set; }
