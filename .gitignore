@@ -23,3 +23,7 @@ TerapicFisicHelper.Entities/obj/Debug/net5.0/TerapicFisicHelper.Entities.csprojA
 TerapicFisicHelper.Entities/obj/Debug/net5.0/TerapicFisicHelper.Entities.assets.cache
 TerapicFisicHelper.Data/obj/project.assets.json
 TerapicFisicHelper.Data/obj/project.nuget.cache
+TerapicFisicHelper.Web/obj/project.nuget.cache
+*.cache
+*.json
+*.props
