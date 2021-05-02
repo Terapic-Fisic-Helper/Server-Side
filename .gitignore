@@ -2,4 +2,5 @@
 *.json
 *.props
 TerapicFisicHelper.Web/obj/Debug/net5.0/TerapicFisicHelper.Web.AssemblyInfo.cs
-*.cs
+
+TerapicFisicHelper.Data/obj/Debug/net5.0/TerapicFisicHelper.Data.AssemblyInfo.cs
