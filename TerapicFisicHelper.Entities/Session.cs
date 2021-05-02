@@ -15,5 +15,8 @@ namespace TerapicFisicHelper.Entities
         public string StartHour { get; set; }
         public string EndHour { get; set; }
         public Specialist Specialist { get; set; }
+        public List<History> Histories { get; set; }
+        public List<EquipamentSession> EquipamentSessions { get; set; }
+        public List<TagSession> TagSessions { get; set; }
     }
 }
