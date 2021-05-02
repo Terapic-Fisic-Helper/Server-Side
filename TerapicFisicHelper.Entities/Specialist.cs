@@ -12,5 +12,8 @@ namespace TerapicFisicHelper.Entities
         public int UserId { get; set; }
         public string Specialty { get; set; }
         public User User { get; set; }
+        public IList<Session> Sessions { get; set; } = new List<Session>();
+
+        public List<Review> Reviews { get; set; }
     }
 }
