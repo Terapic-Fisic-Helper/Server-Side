@@ -1,3 +1,5 @@
 *.cache
 *.json
 *.props
+TerapicFisicHelper.Web/obj/Debug/net5.0/TerapicFisicHelper.Web.AssemblyInfo.cs
+*.cs
