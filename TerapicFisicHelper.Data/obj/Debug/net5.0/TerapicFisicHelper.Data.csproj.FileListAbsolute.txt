@@ -1,0 +1,5 @@
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Data\bin\Debug\net5.0\TerapicFisicHelper.Entities.dll
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Data\obj\Debug\net5.0\TerapicFisicHelper.Data.csprojAssemblyReference.cache
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Data\obj\Debug\net5.0\TerapicFisicHelper.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Data\obj\Debug\net5.0\TerapicFisicHelper.Data.AssemblyInfoInputs.cache
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Data\obj\Debug\net5.0\TerapicFisicHelper.Data.AssemblyInfo.cs
