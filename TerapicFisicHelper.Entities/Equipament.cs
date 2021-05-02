@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace TerapicFisicHelper.Entities
 {
-    class Equipament
+    public class Equipament
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }
