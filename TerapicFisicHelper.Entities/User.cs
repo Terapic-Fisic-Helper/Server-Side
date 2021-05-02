@@ -24,5 +24,8 @@ namespace TerapicFisicHelper.Entities
         public string Password { get; set; }
         [JsonIgnore]
         public string Token { get; set; }
+
+        public Customer Customer { get; set; }
+        public Specialist Specialist { get; set; }
     }
 }
