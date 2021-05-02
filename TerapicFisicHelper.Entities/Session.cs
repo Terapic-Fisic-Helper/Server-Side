@@ -9,6 +9,8 @@ namespace TerapicFisicHelper.Entities
 {
     public class Session
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Debe asignar un especialista a la sesion")]
         public int SpecialistId { get; set; }
         
