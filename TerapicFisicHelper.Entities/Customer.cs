@@ -20,8 +20,8 @@ namespace TerapicFisicHelper.Entities
         public int UserId { get; set; }
         
         public User User { get; set; }
-        public List<Subscription> Subscriptions { get; set; }
-        public List<History> Histories { get; set; }
-        public List<Review> Reviews { get; set; }
+        public ICollection<Subscription> Subscriptions { get; set; }
+        public ICollection<History> Histories { get; set; }
+        public ICollection<Review> Reviews { get; set; }
     }
 }

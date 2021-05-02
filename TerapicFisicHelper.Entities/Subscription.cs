@@ -17,7 +17,7 @@ namespace TerapicFisicHelper.Entities
         public DateTime ExpiryDate { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
-        public SubscriptionPlan SubscriptionPlan { get; set; }
-        public Customer Customer { get; set; }
+        public virtual SubscriptionPlan SubscriptionPlan { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

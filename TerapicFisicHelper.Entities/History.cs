@@ -17,7 +17,7 @@ namespace TerapicFisicHelper.Entities
         
         [Required]
         public DateTime Watched { get; set; }
-        public Customer Customer { get; set; }
-        public Session Session { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual Session Session { get; set; }
     }
 }

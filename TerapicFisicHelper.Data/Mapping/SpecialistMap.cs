@@ -18,9 +18,8 @@ namespace TerapicFisicHelper.Data.Mapping
             builder.Property(s => s.Id).IsRequired().ValueGeneratedOnAdd();
             builder.Property(s => s.Specialty).IsRequired().HasMaxLength(50);
 
-            builder.HasMany(s => s.Sessions)
-                .WithOne(ss => ss.Specialist)
-                .HasForeignKey(ss => ss.SpecialistId);
+            builder.HasMany(s => s.Sessions).WithOne(ss => ss.Specialist).HasForeignKey(ss => ss.SpecialistId);
+
         }
     }
 }

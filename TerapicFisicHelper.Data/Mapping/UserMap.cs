@@ -30,12 +30,14 @@ namespace TerapicFisicHelper.Data.Mapping
             builder.HasOne(u => u.Customer)
                 .WithOne(c => c.User)
                 .HasForeignKey<Customer>(u => u.UserId)
-                .HasConstraintName("fk_user_customer");
+                .HasConstraintName("fk_user_customer")
+                .IsRequired(true);
             
             builder.HasOne(u => u.Specialist)
                 .WithOne(s => s.User)
                 .HasForeignKey<Specialist>(u => u.UserId)
-                .HasConstraintName("fk_user_specialist");
+                .HasConstraintName("fk_user_specialist")
+                .IsRequired(true);
 
         }
     }

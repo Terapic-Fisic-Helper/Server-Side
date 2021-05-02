@@ -43,7 +43,7 @@ namespace TerapicFisicHelper.Entities
         [StringLength(8, ErrorMessage = "Password del usuario debe tener al menos 8 caracteres")]
         public string Password { get; set; }
 
-        public Customer Customer { get; set; }
-        public Specialist Specialist { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual Specialist Specialist { get; set; }
     }
 }

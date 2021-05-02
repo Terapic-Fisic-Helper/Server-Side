@@ -1,0 +1,12 @@
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\bin\Debug\net5.0\TerapicFisicHelper.Entities.deps.json
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\bin\Debug\net5.0\TerapicFisicHelper.Entities.dll
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\bin\Debug\net5.0\ref\TerapicFisicHelper.Entities.dll
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\bin\Debug\net5.0\TerapicFisicHelper.Entities.pdb
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\obj\Debug\net5.0\TerapicFisicHelper.Entities.csprojAssemblyReference.cache
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\obj\Debug\net5.0\TerapicFisicHelper.Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\obj\Debug\net5.0\TerapicFisicHelper.Entities.AssemblyInfoInputs.cache
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\obj\Debug\net5.0\TerapicFisicHelper.Entities.AssemblyInfo.cs
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\obj\Debug\net5.0\TerapicFisicHelper.Entities.csproj.CoreCompileInputs.cache
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\obj\Debug\net5.0\TerapicFisicHelper.Entities.dll
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\obj\Debug\net5.0\ref\TerapicFisicHelper.Entities.dll
+C:\Users\andre\Desktop\TerapicFisicHelper\Server-Side\TerapicFisicHelper.Entities\obj\Debug\net5.0\TerapicFisicHelper.Entities.pdb
