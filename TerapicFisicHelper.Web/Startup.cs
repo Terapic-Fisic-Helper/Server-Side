@@ -35,7 +35,7 @@ namespace TerapicFisicHelper.Web
                     {
                         Name = "Grupo EZCODE - TerapicFisicHelper",
                         Email = "u201621283@upc.edu.pe",
-                        Url = new Uri("https://github.com/Terapic-Fisic-Helper/Server-Side),
+                        Url = new Uri("https://github.com/Terapic-Fisic-Helper/Server-Side")
                     }
                 });
             });
