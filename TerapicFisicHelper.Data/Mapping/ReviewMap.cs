@@ -15,16 +15,19 @@ namespace TerapicFisicHelper.Data.Mapping
         {
             builder.ToTable("reviews");
             builder.HasKey(r => new { r.CustomerId, r.SpecialistId });
-            builder.Property(r => r.Description).HasColumnName("description").HasMaxLength(255);
-            builder.Property(r => r.Rank);
+            builder.Property(r => r.Description).IsRequired().HasMaxLength(255);
+            builder.Property(r => r.Rank).IsRequired();
             
             builder.HasOne(r => r.Customer)
                 .WithMany(c => c.Reviews)
-                .HasForeignKey(r => r.CustomerId);
-
+                .HasForeignKey(r => r.CustomerId)
+                .HasConstraintName("fk_review_customer");
+            
             builder.HasOne(r => r.Specialist)
                 .WithMany(s => s.Reviews)
-                .HasForeignKey(r => r.SpecialistId);
+                .HasForeignKey(r => r.SpecialistId)
+                .HasConstraintName("fk_review_specialist")
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
