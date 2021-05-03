@@ -168,5 +168,13 @@ namespace TerapicFisicHelper.Web.Controllers
 
             return Ok();
         }
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] AuthenticationRequest request)
+        {
+            var response = _context.(request);
+            if (response == null)
+                return BadRequest(new { message = "Invalid Username or Password" });
+            return Ok(response);
+        }
     }
 }
