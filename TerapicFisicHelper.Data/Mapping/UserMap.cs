@@ -13,7 +13,8 @@ namespace TerapicFisicHelper.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("user").HasKey(u => u.Id);
+            builder.ToTable("users");
+            builder.HasKey(u => u.Id);
             builder.Property(u => u.Id).IsRequired().ValueGeneratedOnAdd();
             builder.Property(u => u.Name).IsRequired().HasMaxLength(50);
             builder.Property(u => u.LastName).IsRequired().HasMaxLength(50);
@@ -30,12 +31,12 @@ namespace TerapicFisicHelper.Data.Mapping
             builder.HasOne(u => u.Customer)
                 .WithOne(c => c.User)
                 .HasForeignKey<Customer>(u => u.UserId)
-                .HasConstraintName("fk_user_customer");
-            
+                .HasConstraintName("fk_users_customer");
+
             builder.HasOne(u => u.Specialist)
                 .WithOne(s => s.User)
                 .HasForeignKey<Specialist>(u => u.UserId)
-                .HasConstraintName("fk_user_specialist");
+                .HasConstraintName("fk_users_specialist");
 
         }
     }
