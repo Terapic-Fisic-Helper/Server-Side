@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TerapicFisicHelper.Data;
 using TerapicFisicHelper.Entities;
+using TerapicFisicHelper.Web.Models;
 
 namespace TerapicFisicHelper.Web.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Produces("application/json")]
     public class UsersController : ControllerBase
     {
         private readonly DbContextTerapicFisicHelperApp _context;
@@ -23,14 +25,30 @@ namespace TerapicFisicHelper.Web.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<IEnumerable<UserModel>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var userList = await _context.Users.ToListAsync();
+
+            return userList.Select(c => new UserModel
+            {
+                Id = c.Id,
+                Name = c.Name,
+                LastName = c.LastName,
+                Description = c.Description,
+                Birth = c.Birth,
+                Address = c.Address,
+                Phone = c.Phone,
+                Age = c.Age,
+                Email = c.Email,
+                Country = c.Country,
+                Gender = c.Gender,
+                Password = c.Password
+            });
         }
 
-        // GET: api/Users/5
+        // GET: api/Users/GetCategory/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -39,70 +57,118 @@ namespace TerapicFisicHelper.Web.Controllers
                 return NotFound();
             }
 
-            return user;
+            return Ok(new UserModel
+            {
+                Id = user.Id,
+                Name = user.Name,
+                LastName = user.LastName,
+                Description = user.Description,
+                Birth = user.Birth,
+                Address = user.Address,
+                Phone = user.Phone,
+                Age = user.Age,
+                Email = user.Email,
+                Country = user.Country,
+                Gender = user.Gender,
+                Password = user.Password
+            });
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        // POST: api/Users
+        [HttpPost]
+        public async Task<IActionResult> PostUser([FromBody] CreateUserModel model)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            _context.Entry(user).State = EntityState.Modified;
+            User user = new User
+            {
+                Name = model.Name,
+                LastName = model.LastName,
+                Description = model.Description,
+                Birth = model.Birth,
+                Address = model.Address,
+                Phone = model.Phone,
+                Age = model.Age,
+                Email = model.Email,
+                Country = model.Country,
+                Gender = model.Gender,
+                Password = model.Password
+            };
+
+            _context.Users.Add(user);
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
 
-            return NoContent();
+            return Ok();
         }
 
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        // PUT: api/Users/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUser([FromBody] UpdateUserModel model)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            if (model.Id <= 0)
+                return BadRequest();
+
+            var user = await _context.Users.FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (user == null)
+                return NotFound();
+
+            user.Name = model.Name;
+            user.LastName = model.LastName;
+            user.Description = model.Description;
+            user.Birth = model.Birth;
+            user.Address = model.Address;
+            user.Phone = model.Phone;
+            user.Age = model.Age;
+            user.Email = model.Email;
+            user.Country = model.Country;
+            user.Gender = model.Gender;
+            user.Password = model.Password;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok();
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {
             var user = await _context.Users.FindAsync(id);
+
             if (user == null)
-            {
                 return NotFound();
-            }
 
             _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
+            return Ok();
         }
     }
 }
