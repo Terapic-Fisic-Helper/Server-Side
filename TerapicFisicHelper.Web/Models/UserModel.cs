@@ -19,10 +19,5 @@ namespace TerapicFisicHelper.Web.Models
         public string Country { get; set; }
         public string Gender { get; set; }
         public string Password { get; set; }
-      
-        public interface UserModelServicio
-        {
-            AuthenticationResponse Authenticate(AuthenticationRequest request);
-        }
     }
 }
