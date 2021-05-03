@@ -18,7 +18,7 @@ namespace TerapicFisicHelper.Entities
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Apellido del usuario debe tener entre 3 a 50 caracteres")]
         public string LastName { get; set; }
         [Required(ErrorMessage = "Debe incluir la descripcion del usuario")]
-        [StringLength(255, MinimumLength = 3, ErrorMessage = "Descripcion del usuario debe tener entre 3 a 255 caracteres")]
+        [StringLength(255, MinimumLength = 3, ErrorMessage = "Descripcion del usuario debe tener entre 3 a 50 caracteres")]
         public string Description { get; set; }
         [Required]
         public DateTime Birth { get; set; }

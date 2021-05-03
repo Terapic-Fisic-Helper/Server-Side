@@ -15,14 +15,16 @@ namespace TerapicFisicHelper.Data.Mapping
         {
             builder.ToTable("equipament_sessions");
             builder.HasKey(es => new { es.EquipamentId, es.SessionId });
-
+            
             builder.HasOne(es => es.Equipament)
                 .WithMany(e => e.EquipamentSessions)
-                .HasForeignKey(es => es.EquipamentId);
+                .HasForeignKey(es => es.EquipamentId)
+                .HasConstraintName("fk_equipamentsession_equipament");
             
             builder.HasOne(es => es.Session)
                 .WithMany(s => s.EquipamentSessions)
-                .HasForeignKey(es => es.SessionId);
+                .HasForeignKey(es => es.SessionId)
+                .HasConstraintName("fk_equipamentsession_session");
         }
     }
 }

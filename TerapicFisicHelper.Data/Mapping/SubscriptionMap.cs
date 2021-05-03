@@ -15,16 +15,18 @@ namespace TerapicFisicHelper.Data.Mapping
         {
             builder.ToTable("subscriptions");
             builder.HasKey(s => new { s.CustomerId, s.SubscriptionPlanId });
-            builder.Property(s => s.StartDate);
-            builder.Property(s => s.ExpiryDate);
-
+            builder.Property(s => s.StartDate).IsRequired();
+            builder.Property(s => s.ExpiryDate).IsRequired();
+            
             builder.HasOne(s => s.Customer)
                 .WithMany(c => c.Subscriptions)
-                .HasForeignKey(s => s.CustomerId);
-            
+                .HasForeignKey(s => s.CustomerId)
+                .HasConstraintName("fk_subscription_customer");
+
             builder.HasOne(s => s.SubscriptionPlan)
                 .WithMany(sp => sp.Subscriptions)
-                .HasForeignKey(s => s.SubscriptionPlanId);
+                .HasForeignKey(s => s.SubscriptionPlanId)
+                .HasConstraintName("fk_subscription_subscriptionplan");
         }
     }
 }
