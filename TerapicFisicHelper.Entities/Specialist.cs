@@ -18,8 +18,8 @@ namespace TerapicFisicHelper.Entities
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Nombre de la especialidad debe tener entre 3 a 50 caracteres")]
         public string Specialty { get; set; }
         public User User { get; set; }
-        public IList<Session> Sessions { get; set; } = new List<Session>();
+        public ICollection<Session> Sessions { get; set; } = new List<Session>();
 
-        public List<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace TerapicFisicHelper.Entities
         [Required(ErrorMessage = "Debe asignar una sesion")]
         public int SessionId { get; set; }
 
-        public Tag Tag { get; set; }
-        public Session Session { get; set; }
+        public virtual Tag Tag { get; set; }
+        public virtual Session Session { get; set; }
     }
 }

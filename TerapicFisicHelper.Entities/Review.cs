@@ -22,7 +22,7 @@ namespace TerapicFisicHelper.Entities
         [Required(ErrorMessage = "Debe asignar un especialista a la revision")]
         public int SpecialistId { get; set; }
         
-        public Customer Customer { get; set; }
-        public Specialist Specialist { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual Specialist Specialist { get; set; }
     }
 }

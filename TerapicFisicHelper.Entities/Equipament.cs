@@ -19,6 +19,6 @@ namespace TerapicFisicHelper.Entities
         [StringLength(255, MinimumLength = 3, ErrorMessage = "Descripcion del cliente debe tener entre 3 a 255 caracteres")]
         public string Description { get; set; }
         
-        public List<EquipamentSession> EquipamentSessions { get; set; }
+        public ICollection<EquipamentSession> EquipamentSessions { get; set; }
     }
 }

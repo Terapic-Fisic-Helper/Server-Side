@@ -15,8 +15,8 @@ namespace TerapicFisicHelper.Data.Mapping
         {
             builder.ToTable("specialists");
             builder.HasKey(s => s.Id);
-            builder.Property(s => s.Id).IsRequired().ValueGeneratedOnAdd();
-            builder.Property(s => s.Specialty).IsRequired().HasMaxLength(50);
+            builder.Property(s => s.Id).HasColumnName("specialist_id");
+            builder.Property(s => s.Specialty).HasColumnName("specialty").HasMaxLength(50);
 
             builder.HasMany(s => s.Sessions)
                 .WithOne(ss => ss.Specialist)

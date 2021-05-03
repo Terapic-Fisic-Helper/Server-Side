@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerapicFisicHelper.Data.Mapping;
 using TerapicFisicHelper.Entities;
 
 namespace TerapicFisicHelper.Data
@@ -31,7 +32,18 @@ namespace TerapicFisicHelper.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.ApplyConfiguration(new CustomerMap());
+            modelBuilder.ApplyConfiguration(new CustomerMap());
+            modelBuilder.ApplyConfiguration(new EquipamentMap());
+            modelBuilder.ApplyConfiguration(new EquipamentSessionMap());
+            modelBuilder.ApplyConfiguration(new HistoryMap());
+            modelBuilder.ApplyConfiguration(new ReviewMap());
+            modelBuilder.ApplyConfiguration(new SessionMap());
+            modelBuilder.ApplyConfiguration(new SpecialistMap());
+            modelBuilder.ApplyConfiguration(new SubscriptionMap());
+            modelBuilder.ApplyConfiguration(new SubscriptionPlanMap());
+            modelBuilder.ApplyConfiguration(new TagMap());
+            modelBuilder.ApplyConfiguration(new TagSessionMap());
+            modelBuilder.ApplyConfiguration(new UserMap());
         }
     }
 }

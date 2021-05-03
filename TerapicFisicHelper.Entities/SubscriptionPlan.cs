@@ -21,7 +21,7 @@ namespace TerapicFisicHelper.Entities
         
         [Required]
         public int Cost { get; set; }
-        public List<Subscription> Subscriptions { get; set; }
+        public ICollection<Subscription> Subscriptions { get; set; }
 
     }
 }
