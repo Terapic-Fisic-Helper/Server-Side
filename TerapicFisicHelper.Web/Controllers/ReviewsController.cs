@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TerapicFisicHelper.Data;
 using TerapicFisicHelper.Entities;
+using TerapicFisicHelper.Web.Models;
 
 namespace TerapicFisicHelper.Web.Controllers
 {
@@ -24,100 +25,82 @@ namespace TerapicFisicHelper.Web.Controllers
 
         // GET: api/Reviews
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
+        public async Task<IEnumerable<ReviewModel>> GetReviews()
         {
-            return await _context.Reviews.ToListAsync();
-        }
+            var reviewList = await _context.Reviews.ToListAsync();
 
-        // GET: api/Reviews/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Review>> GetReview(int id)
-        {
-            var review = await _context.Reviews.FindAsync(id);
-
-            if (review == null)
+            return reviewList.Select(c => new ReviewModel
             {
-                return NotFound();
-            }
-
-            return review;
-        }
-
-        // PUT: api/Reviews/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(int id, Review review)
-        {
-            if (id != review.CustomerId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(review).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ReviewExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+                Description = c.Description,
+                Rank = c.Rank,
+                CustomerId = c.CustomerId,
+                SpecialistId = c.SpecialistId
+            });
         }
 
         // POST: api/Reviews
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Review>> PostReview(Review review)
+        public async Task<IActionResult> PostReview([FromBody] CreateReviewModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            Review review = new Review
+            {
+                Description = model.Description,
+                Rank = model.Rank,
+                CustomerId = model.CustomerId,
+                SpecialistId = model.SpecialistId
+            };
+
             _context.Reviews.Add(review);
+
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException)
+            catch (Exception ex)
             {
-                if (ReviewExists(review.CustomerId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
 
-            return CreatedAtAction("GetReview", new { id = review.CustomerId }, review);
+            return Ok();
         }
 
-        // DELETE: api/Reviews/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReview(int id)
+        [HttpGet("customers/{customerId}")]
+        public async Task<IActionResult> GetAllByCustomerId(int customerId)
         {
-            var review = await _context.Reviews.FindAsync(id);
-            if (review == null)
+            var specialist = await _context.Customers.FindAsync(customerId);
+
+            if (specialist == null)
             {
                 return NotFound();
             }
 
-            _context.Reviews.Remove(review);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(new CustomerModel
+            {
+                Id = specialist.Id,
+                Description = specialist.Description,
+                UserId = specialist.UserId
+            });
         }
 
-        private bool ReviewExists(int id)
+        [HttpGet("specialists/{specialistId}")]
+        public async Task<IActionResult> GetAllBySpecialistId(int specialistId)
         {
-            return _context.Reviews.Any(e => e.CustomerId == id);
+            var customer = await _context.Specialists.FindAsync(specialistId);
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new SpecialistModel
+            {
+                Id = customer.Id,
+                Specialty = customer.Specialty,
+                UserId = customer.UserId
+            });
         }
     }
 }
