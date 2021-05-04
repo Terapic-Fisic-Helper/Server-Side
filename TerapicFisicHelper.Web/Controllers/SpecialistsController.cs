@@ -114,7 +114,7 @@ namespace TerapicFisicHelper.Web.Controllers
 
         // DELETE: api/Specialists/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSpecialist(int id)
+        public async Task<IActionResult> DeleteSpecialist([FromRoute] int id)
         {
             var spec = await _context.Specialists.FindAsync(id);
 
