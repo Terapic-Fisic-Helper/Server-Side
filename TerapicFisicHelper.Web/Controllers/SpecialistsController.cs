@@ -82,57 +82,57 @@ namespace TerapicFisicHelper.Web.Controllers
 
             return Ok();
         }
-        /*
+
         // PUT: api/Specialists/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSpecialist(int id, Specialist specialist)
+        public async Task<IActionResult> PutSpecialist([FromBody] UpdateSpecialistModel model)
         {
-            if (id != specialist.Id)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            _context.Entry(specialist).State = EntityState.Modified;
+            if (model.Id <= 0)
+                return BadRequest();
+
+            var spec = await _context.Specialists.FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (spec == null)
+                return NotFound();
+
+            spec.Specialty = model.Specialty;
+            spec.UserId = model.UserId;
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                if (!SpecialistExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
-
-            return NoContent();
+            return Ok();
         }
 
         // DELETE: api/Specialists/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSpecialist(int id)
         {
-            var specialist = await _context.Specialists.FindAsync(id);
-            if (specialist == null)
-            {
+            var spec = await _context.Specialists.FindAsync(id);
+
+            if (spec == null)
                 return NotFound();
+
+            _context.Specialists.Remove(spec);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            _context.Specialists.Remove(specialist);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok();
         }
-
-        private bool SpecialistExists(int id)
-        {
-            return _context.Specialists.Any(e => e.Id == id);
-        }
-        */
     }
 }
