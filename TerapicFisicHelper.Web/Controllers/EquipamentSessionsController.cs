@@ -86,8 +86,8 @@ namespace TerapicFisicHelper.Web.Controllers
             return Ok();
         }
 
-        // GET: api/EquipamentSessions/5
-        [HttpGet("{id}")]
+        // GET: api/GetAllBySessionId/5
+        [HttpGet("{GetAllBySessionId}/{id}")]
         public async Task<IActionResult> GetAllBySessionId([FromRoute] int sessionId)
         {
             var equipament = await _context.Equipaments.FindAsync(sessionId);
@@ -105,8 +105,8 @@ namespace TerapicFisicHelper.Web.Controllers
             });
         }
 
-        // GET: api/EquipamentSessions/5
-        [HttpGet("{id}")]
+        // GET: api/GetAllByEquipamentId/5
+        [HttpGet("{GetAllByEquipamentId}/{id}")]
         public async Task<IActionResult> GetAllByEquipamentId([FromRoute] int equipamentId)
         {
             var session = await _context.Sessions.FindAsync(equipamentId);
