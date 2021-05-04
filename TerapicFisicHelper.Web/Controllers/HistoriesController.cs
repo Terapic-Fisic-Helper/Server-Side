@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TerapicFisicHelper.Data;
 using TerapicFisicHelper.Entities;
+using TerapicFisicHelper.Web.Models;
 
 namespace TerapicFisicHelper.Web.Controllers
 {
@@ -24,100 +25,86 @@ namespace TerapicFisicHelper.Web.Controllers
 
         // GET: api/Histories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<History>>> GetHistories()
+        public async Task<IEnumerable<HistoryModel>> GetHistories()
         {
-            return await _context.Histories.ToListAsync();
-        }
+            var historyList = await _context.Histories.ToListAsync();
 
-        // GET: api/Histories/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<History>> GetHistory(int id)
-        {
-            var history = await _context.Histories.FindAsync(id);
-
-            if (history == null)
+            return historyList.Select(c => new HistoryModel
             {
-                return NotFound();
-            }
-
-            return history;
-        }
-
-        // PUT: api/Histories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutHistory(int id, History history)
-        {
-            if (id != history.CustomerId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(history).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HistoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+                CustomerId = c.CustomerId,
+                SessionId = c.SessionId,
+                Watched = c.Watched
+            });
         }
 
         // POST: api/Histories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<History>> PostHistory(History history)
+        public async Task<IActionResult> PostHistory([FromBody] CreateHistoryModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            History history = new History
+            {
+                CustomerId = model.CustomerId,
+                SessionId = model.SessionId,
+                Watched = model.Watched
+            };
+
             _context.Histories.Add(history);
+
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException)
+            catch (Exception ex)
             {
-                if (HistoryExists(history.CustomerId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
 
-            return CreatedAtAction("GetHistory", new { id = history.CustomerId }, history);
+            return Ok();
         }
 
-        // DELETE: api/Histories/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteHistory(int id)
+        // GET: api/customers/5
+        [HttpGet("customers/{customerId}")]
+        public async Task<IActionResult> GetAllByCustomerId([FromRoute] int customerId)
         {
-            var history = await _context.Histories.FindAsync(id);
-            if (history == null)
+            var session = await _context.Customers.FindAsync(customerId);
+
+            if (session == null)
             {
                 return NotFound();
             }
 
-            _context.Histories.Remove(history);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(new CustomerModel
+            {
+                Id = session.Id,
+                Description = session.Description,
+                UserId = session.UserId
+            });
         }
 
-        private bool HistoryExists(int id)
+        // GET: api/customers/5
+        [HttpGet("sessions/{sessionId}")]
+        public async Task<IActionResult> GetAllBySessionId([FromRoute] int sessionId)
         {
-            return _context.Histories.Any(e => e.CustomerId == id);
+            var customer = await _context.Sessions.FindAsync(sessionId);
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new SessionModel
+            {
+                Id = customer.Id,
+                SpecialistId = customer.SpecialistId,
+                Title = customer.Title,
+                Description = customer.Description,
+                StartDate = customer.StartDate,
+                StartHour = customer.StartHour,
+                EndHour = customer.EndHour
+            });
         }
     }
 }
