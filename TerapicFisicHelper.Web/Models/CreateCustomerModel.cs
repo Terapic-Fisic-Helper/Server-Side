@@ -15,6 +15,5 @@ namespace TerapicFisicHelper.Web.Models
         [Required(ErrorMessage = "Debe incluir el codigo del usuario")]
         [StringLength(5, MinimumLength = 3, ErrorMessage = "El codigo del usuario debe tener de 3 a 5 caracteres")]
         public int UserId { get; set; }
-
     }
 }
