@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TerapicFisicHelper.Data;
 using TerapicFisicHelper.Entities;
+using TerapicFisicHelper.Web.Models;
 
 namespace TerapicFisicHelper.Web.Controllers
 {
@@ -23,14 +24,25 @@ namespace TerapicFisicHelper.Web.Controllers
 
         // GET: api/Sessions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Session>>> GetSessions()
+        public async Task<IEnumerable<SessionModel>> GetSessions()
         {
-            return await _context.Sessions.ToListAsync();
+            var sessionList = await _context.Sessions.ToListAsync();
+
+            return sessionList.Select(c => new SessionModel
+            {
+                Id = c.Id,
+                SpecialistId = c.SpecialistId,
+                Title = c.Title,
+                Description = c.Description,
+                StartDate = c.StartDate,
+                StartHour = c.StartHour,
+                EndHour = c.EndHour
+            });
         }
 
         // GET: api/Sessions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Session>> GetSession(int id)
+        public async Task<IActionResult> GetSessionById(int id)
         {
             var session = await _context.Sessions.FindAsync(id);
 
@@ -39,68 +51,103 @@ namespace TerapicFisicHelper.Web.Controllers
                 return NotFound();
             }
 
-            return session;
+            return Ok(new SessionModel
+            {
+                Id = session.Id,
+                SpecialistId = session.SpecialistId,
+                Title = session.Title,
+                Description = session.Description,
+                StartDate = session.StartDate,
+                StartHour = session.StartHour,
+                EndHour = session.EndHour
+            });
         }
 
-        // PUT: api/Sessions/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSession(int id, Session session)
+        // POST: api/Sessions
+        [HttpPost]
+        public async Task<IActionResult> PostSession([FromBody] CreateSessionModel model)
         {
-            if (id != session.Id)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            _context.Entry(session).State = EntityState.Modified;
+            Session session = new Session
+            {
+                SpecialistId = model.SpecialistId,
+                Title = model.Title,
+                Description = model.Description,
+                StartDate = model.StartDate,
+                StartHour = model.StartHour,
+                EndHour = model.EndHour
+            };
+
+            _context.Sessions.Add(session);
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!SessionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
 
-            return NoContent();
+            return Ok();
         }
 
-        // POST: api/Sessions
-        [HttpPost]
-        public async Task<ActionResult<Session>> PostSession(Session session)
+        // PUT: api/Sessions/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutSession([FromBody] UpdateSessionModel model)
         {
-            _context.Sessions.Add(session);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetSession", new { id = session.Id }, session);
+            if (model.Id <= 0)
+                return BadRequest();
+
+            var session = await _context.Sessions.FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (session == null)
+                return NotFound();
+
+            session.SpecialistId = model.SpecialistId;
+            session.Title = model.Title;
+            session.Description = model.Description;
+            session.StartDate = model.StartDate;
+            session.StartHour = model.StartHour;
+            session.EndHour = model.EndHour;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok();
         }
 
         // DELETE: api/Sessions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSession(int id)
+        public async Task<IActionResult> DeleteSession([FromRoute] int id)
         {
             var session = await _context.Sessions.FindAsync(id);
+
             if (session == null)
-            {
                 return NotFound();
-            }
 
             _context.Sessions.Remove(session);
-            await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-        private bool SessionExists(int id)
-        {
-            return _context.Sessions.Any(e => e.Id == id);
+            return Ok();
         }
     }
 }
