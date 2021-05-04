@@ -87,30 +87,11 @@ namespace TerapicFisicHelper.Web.Controllers
         }
 
         // GET: api/GetAllBySessionId/5
-        [HttpGet("{GetAllBySessionId}/{id}")]
+        [HttpGet("sessions/{sessionId}")]
         public async Task<IActionResult> GetAllBySessionId([FromRoute] int sessionId)
         {
-            var equipament = await _context.Equipaments.FindAsync(sessionId);
+            var session = await _context.Sessions.FindAsync(sessionId);
             
-            if (equipament == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(new EquipamentModel
-            {
-                Id = equipament.Id,
-                Name = equipament.Name,
-                Description = equipament.Description,
-            });
-        }
-
-        // GET: api/GetAllByEquipamentId/5
-        [HttpGet("{GetAllByEquipamentId}/{id}")]
-        public async Task<IActionResult> GetAllByEquipamentId([FromRoute] int equipamentId)
-        {
-            var session = await _context.Sessions.FindAsync(equipamentId);
-
             if (session == null)
             {
                 return NotFound();
@@ -125,6 +106,25 @@ namespace TerapicFisicHelper.Web.Controllers
                 StartDate = session.StartDate,
                 StartHour = session.StartHour,
                 EndHour = session.EndHour
+            });
+        }
+
+        // GET: api/GetAllByEquipamentId/5
+        [HttpGet("equipaments/{equipamentId}")]
+        public async Task<IActionResult> GetAllByEquipamentId([FromRoute] int equipamentId)
+        {
+            var equipament = await _context.Equipaments.FindAsync(equipamentId);
+
+            if (equipament == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new EquipamentModel
+            {
+                Id = equipament.Id,
+                Name = equipament.Name,
+                Description = equipament.Description,
             });
         }
     }
