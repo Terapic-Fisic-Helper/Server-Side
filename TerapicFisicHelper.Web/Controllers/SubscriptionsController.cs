@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TerapicFisicHelper.Data;
 using TerapicFisicHelper.Entities;
+using TerapicFisicHelper.Web.Models;
 
 namespace TerapicFisicHelper.Web.Controllers
 {
@@ -23,100 +24,106 @@ namespace TerapicFisicHelper.Web.Controllers
 
         // GET: api/Subscriptions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Subscription>>> GetSubscriptions()
+        public async Task<IEnumerable<SubscriptionModel>> GetSubscriptions()
         {
-            return await _context.Subscriptions.ToListAsync();
-        }
+            var subscriptionList = await _context.Subscriptions.ToListAsync();
 
-        // GET: api/Subscriptions/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Subscription>> GetSubscription(int id)
-        {
-            var subscription = await _context.Subscriptions.FindAsync(id);
-
-            if (subscription == null)
+            return subscriptionList.Select(c => new SubscriptionModel
             {
-                return NotFound();
-            }
-
-            return subscription;
-        }
-
-        // PUT: api/Subscriptions/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSubscription(int id, Subscription subscription)
-        {
-            if (id != subscription.CustomerId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(subscription).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SubscriptionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+                CustomerId = c.CustomerId,
+                SubscriptionPlanId = c.SubscriptionPlanId,
+                ExpiryDate = c.ExpiryDate,
+                StartDate = c.StartDate
+            });
         }
 
         // POST: api/Subscriptions
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Subscription>> PostSubscription(Subscription subscription)
+        public async Task<IActionResult> PostSubscription([FromBody] CreateSubscriptionModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            Subscription subscription = new Subscription
+            {
+                CustomerId = model.CustomerId,
+                SubscriptionPlanId = model.SubscriptionPlanId,
+                ExpiryDate = model.ExpiryDate,
+                StartDate = model.StartDate
+            };
+
             _context.Subscriptions.Add(subscription);
+
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException)
+            catch (Exception ex)
             {
-                if (SubscriptionExists(subscription.CustomerId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
 
-            return CreatedAtAction("GetSubscription", new { id = subscription.CustomerId }, subscription);
+            return Ok();
         }
 
         // DELETE: api/Subscriptions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSubscription(int id)
+        public async Task<IActionResult> DeleteSubscription([FromRoute] int id)
         {
             var subscription = await _context.Subscriptions.FindAsync(id);
+
             if (subscription == null)
+                return NotFound();
+
+            _context.Subscriptions.Remove(subscription);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok();
+        }
+
+        [HttpGet("customers/{customerId}")]
+        public async Task<IActionResult> GetAllByCustomerId(int customerId)
+        {
+            var subscriptionPlans = await _context.Customers.FindAsync(customerId);
+
+            if (subscriptionPlans == null)
             {
                 return NotFound();
             }
 
-            _context.Subscriptions.Remove(subscription);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(new CustomerModel
+            {
+                Id = subscriptionPlans.Id,
+                Description = subscriptionPlans.Description,
+                UserId = subscriptionPlans.UserId
+            });
         }
 
-        private bool SubscriptionExists(int id)
+        [HttpGet("plans/{subscriptionPlanId}")]
+        public async Task<IActionResult> GetAllBySubscriptionPlanId(int subscriptionPlanId)
         {
-            return _context.Subscriptions.Any(e => e.CustomerId == id);
+            var customers = await _context.SubscriptionPlans.FindAsync(subscriptionPlanId);
+
+            if (customers == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new SubscriptionPlanModel
+            {
+                Id = customers.Id,
+                Name = customers.Name,
+                Description = customers.Description,
+                Cost = customers.Cost
+            });
         }
     }
 }
