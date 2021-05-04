@@ -86,7 +86,7 @@ namespace TerapicFisicHelper.Web.Controllers
             return Ok();
         }
 
-        // GET: api/GetAllBySessionId/5
+        // GET: api/sessions/5
         [HttpGet("sessions/{sessionId}")]
         public async Task<IActionResult> GetAllBySessionId([FromRoute] int sessionId)
         {
@@ -109,7 +109,7 @@ namespace TerapicFisicHelper.Web.Controllers
             });
         }
 
-        // GET: api/GetAllByEquipamentId/5
+        // GET: api/equipaments/5
         [HttpGet("equipaments/{equipamentId}")]
         public async Task<IActionResult> GetAllByEquipamentId([FromRoute] int equipamentId)
         {
