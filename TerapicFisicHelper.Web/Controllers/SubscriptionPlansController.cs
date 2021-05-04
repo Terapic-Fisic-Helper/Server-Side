@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TerapicFisicHelper.Data;
 using TerapicFisicHelper.Entities;
+using TerapicFisicHelper.Web.Models;
 
 namespace TerapicFisicHelper.Web.Controllers
 {
@@ -23,14 +24,22 @@ namespace TerapicFisicHelper.Web.Controllers
 
         // GET: api/SubscriptionPlans
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SubscriptionPlan>>> GetSubscriptionPlans()
+        public async Task<IEnumerable<SubscriptionPlanModel>> GetSubscriptionPlans()
         {
-            return await _context.SubscriptionPlans.ToListAsync();
+            var subscriptionList = await _context.SubscriptionPlans.ToListAsync();
+
+            return subscriptionList.Select(c => new SubscriptionPlanModel
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Description = c.Description,
+                Cost = c.Cost
+            });
         }
 
         // GET: api/SubscriptionPlans/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<SubscriptionPlan>> GetSubscriptionPlan(int id)
+        public async Task<IActionResult> GetSubscriptionPlanById([FromRoute] int id)
         {
             var subscriptionPlan = await _context.SubscriptionPlans.FindAsync(id);
 
@@ -39,70 +48,93 @@ namespace TerapicFisicHelper.Web.Controllers
                 return NotFound();
             }
 
-            return subscriptionPlan;
+            return Ok(new SubscriptionPlanModel
+            {
+                Id = subscriptionPlan.Id,
+                Name = subscriptionPlan.Name,
+                Description = subscriptionPlan.Description,
+                Cost = subscriptionPlan.Cost
+            });
         }
 
-        // PUT: api/SubscriptionPlans/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSubscriptionPlan(int id, SubscriptionPlan subscriptionPlan)
+        // POST: api/SubscriptionPlans
+        [HttpPost]
+        public async Task<IActionResult> PostSubscriptionPlan([FromBody] CreateSubscriptionPlanModel model)
         {
-            if (id != subscriptionPlan.Id)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            _context.Entry(subscriptionPlan).State = EntityState.Modified;
+            SubscriptionPlan subscriptionPlan = new SubscriptionPlan
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Cost = model.Cost
+            };
+
+            _context.SubscriptionPlans.Add(subscriptionPlan);
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!SubscriptionPlanExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
-
-            return NoContent();
+            return Ok();
         }
 
-        // POST: api/SubscriptionPlans
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<SubscriptionPlan>> PostSubscriptionPlan(SubscriptionPlan subscriptionPlan)
+        // PUT: api/SubscriptionPlans/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutSubscriptionPlan([FromBody] UpdateSubscriptionPlanModel model)
         {
-            _context.SubscriptionPlans.Add(subscriptionPlan);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetSubscriptionPlan", new { id = subscriptionPlan.Id }, subscriptionPlan);
+            if (model.Id <= 0)
+                return BadRequest();
+
+            var subscriptionPlan = await _context.SubscriptionPlans.FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (subscriptionPlan == null)
+                return NotFound();
+
+            subscriptionPlan.Name = model.Name;
+            subscriptionPlan.Description = model.Description;
+            subscriptionPlan.Cost = model.Cost;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok();
         }
 
         // DELETE: api/SubscriptionPlans/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSubscriptionPlan(int id)
+        public async Task<IActionResult> DeleteSubscriptionPlan([FromRoute] int id)
         {
             var subscriptionPlan = await _context.SubscriptionPlans.FindAsync(id);
+
             if (subscriptionPlan == null)
-            {
                 return NotFound();
-            }
 
             _context.SubscriptionPlans.Remove(subscriptionPlan);
-            await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-        private bool SubscriptionPlanExists(int id)
-        {
-            return _context.SubscriptionPlans.Any(e => e.Id == id);
+            return Ok();
         }
     }
 }
