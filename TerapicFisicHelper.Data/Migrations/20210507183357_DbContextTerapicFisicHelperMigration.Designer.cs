@@ -10,8 +10,8 @@ using TerapicFisicHelper.Data;
 namespace TerapicFisicHelper.Data.Migrations
 {
     [DbContext(typeof(DbContextTerapicFisicHelperApp))]
-    [Migration("20210503091930_TerapicFisicHelperMigration")]
-    partial class TerapicFisicHelperMigration
+    [Migration("20210507183357_DbContextTerapicFisicHelperMigration")]
+    partial class DbContextTerapicFisicHelperMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,7 +34,6 @@ namespace TerapicFisicHelper.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("UserId")
-                        .HasMaxLength(5)
                         .HasColumnType("int");
 
                     b.HasKey("Id");

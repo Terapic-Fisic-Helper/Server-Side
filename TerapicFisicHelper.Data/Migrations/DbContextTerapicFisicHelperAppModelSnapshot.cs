@@ -32,7 +32,6 @@ namespace TerapicFisicHelper.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("UserId")
-                        .HasMaxLength(5)
                         .HasColumnType("int");
 
                     b.HasKey("Id");

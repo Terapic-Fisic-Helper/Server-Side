@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TerapicFisicHelper.Data.Migrations
 {
-    public partial class TerapicFisicHelperMigration : Migration
+    public partial class DbContextTerapicFisicHelperMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -80,7 +80,7 @@ namespace TerapicFisicHelper.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    UserId = table.Column<int>(type: "int", maxLength: 5, nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
