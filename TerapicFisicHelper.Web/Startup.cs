@@ -41,6 +41,11 @@ namespace TerapicFisicHelper.Web
             });
 
             services.AddDbContext<DbContextTerapicFisicHelperApp>(options => options.UseSqlServer(Configuration.GetConnectionString("ConexionTFH")));
+
+            services.AddCors(options => {
+                options.AddPolicy("DemoTerapicFisicHelper",
+                    builder => builder.WithOrigins("*").WithHeaders("*").WithMethods("*"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +57,8 @@ namespace TerapicFisicHelper.Web
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TerapicFisicHelper.Web v1"));
             }
+
+            app.UseCors("DemoTerapicFisicHelper");
 
             app.UseHttpsRedirection();
 
