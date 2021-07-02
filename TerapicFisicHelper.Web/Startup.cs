@@ -44,7 +44,8 @@ namespace TerapicFisicHelper.Web
 
             services.AddCors(options => {
                 options.AddPolicy("DemoTerapicFisicHelper",
-                    builder => builder.WithOrigins("*").WithHeaders("*").WithMethods("*"));
+                    //builder => builder.WithOrigins("*").WithHeaders("*").WithMethods("*"));
+                    builder => builder.AllowAnyOrigin());
             });
         }
 
